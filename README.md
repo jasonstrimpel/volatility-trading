@@ -1,6 +1,6 @@
 #volest#
 
-A complete set of volatility estimators based on Euan Sinclair's Volatility Trading (http://www.amazon.com/Volatility-Trading-CD-ROM-Euan-Sinclair/dp/0470181990).
+A complete set of volatility estimators based on Euan Sinclair's Volatility Trading (http://www.amazon.com/gp/product/0470181990/ref=as_li_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=0470181990&linkCode=as2&tag=quantfinancea-20&linkId=OTGFUXGQ72RGDYYI).
 
 Volatility estimators include:
 
