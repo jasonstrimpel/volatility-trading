@@ -54,7 +54,7 @@ bench='^GSPC'
 
 
 # initialize class
-vol = volest.VolatilityEstimator(symbol, start, end, type)
+vol = volest.VolatilityEstimator(symbol, start, end, estimator)
 
 
 # call plt.show() on any of the below
