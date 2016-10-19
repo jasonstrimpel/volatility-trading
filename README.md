@@ -35,12 +35,11 @@ Example usage:
 ```python
 
 import volest
-import datetime as dt
 
 # variables to initialize class
 symbol = 'JPM'
-start = dt.datetime(2013, 1, 1)
-end = dt.datetime(2013, 12, 31)
+start = '2013-01-01'
+end = '2013-12-31'
 estimator = 'GarmanKlass'
 
 
