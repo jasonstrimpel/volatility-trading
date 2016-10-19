@@ -41,7 +41,7 @@ import datetime as dt
 ticker = 'JPM'
 start = dt.datetime(2013, 1, 1)
 end = dt.datetime(2013, 12, 31)
-type = 'GarmanKlass'
+estimator = 'GarmanKlass'
 
 
 #variables for the instances
@@ -51,7 +51,6 @@ quantiles=[0.25, 0.75]
 bins=100
 normed=True
 bench='^GSPC'
-open=False
 
 
 # initialize class
