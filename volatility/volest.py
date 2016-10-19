@@ -7,6 +7,7 @@ import pandas
 import models
 import data
 import numpy as np
+import statsmodels.api as sm
 
 import matplotlib
 import matplotlib.mlab as mlab
@@ -650,11 +651,12 @@ class VolatilityEstimator(object):
             
         """
         y = self._get_estimator(window)
-        x = self._get_estimator(window, symbol=bench)
+        X = self._get_estimator(window, symbol=bench)
         
-        model = str(pandas.ols(y=y, x=x))
+        model = sm.OLS(y, X)
+        results = model.fit()
 
-        return model
+        return results.summary()
     
     def term_sheet(self, window=30, windows=[30, 60, 90, 120], quantiles=[0.25, 0.75], bins=100, normed=True, bench='^GSPC', open=False):
         
@@ -678,7 +680,11 @@ class VolatilityEstimator(object):
         pp.savefig(histogram_fig)
         pp.savefig(benchmark_compare_fig)
         pp.savefig(benchmark_corr_fig)
-        #pp.savefig(benchmark_regression)
+		
+        fig = plt.figure()
+        plt.text(0.01, 0.01, benchmark_regression, fontsize=12)
+        plt.axis('off')
+        pp.savefig(fig)
         
         pp.close()
         
