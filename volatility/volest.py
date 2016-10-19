@@ -388,8 +388,8 @@ class VolatilityEstimator(object):
         """
         estimator = self._get_estimator(window)
         date = estimator.index
-        mean = pandas.rolling_mean(estimator, window)
-        std = pandas.rolling_std(estimator, window)
+        mean = estimator.rolling(window=window, center=False).mean()
+        std = estimator.rolling(window=window, center=False).std()
         z_score = (estimator - mean) / std
         
         realized = estimator
@@ -602,8 +602,8 @@ class VolatilityEstimator(object):
         y = self._get_estimator(window)
         x = self._get_estimator(window, symbol=bench)
         date = y.index
-
-        corr = pandas.rolling_corr(x, y, window)
+		
+        corr = x.rolling(window=window).corr(other=y)
 
         if self._estimator is "Skew" or self._estimator is "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
