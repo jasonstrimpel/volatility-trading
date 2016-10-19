@@ -38,7 +38,7 @@ import volest
 import datetime as dt
 
 # variables to initialize class
-ticker = 'JPM'
+symbol = 'JPM'
 start = dt.datetime(2013, 1, 1)
 end = dt.datetime(2013, 12, 31)
 estimator = 'GarmanKlass'
@@ -54,7 +54,7 @@ bench='^GSPC'
 
 
 # initialize class
-vol = volest.VolatilityEstimator(ticker, start, end, type)
+vol = volest.VolatilityEstimator(symbol, start, end, type)
 
 
 # call plt.show() on any of the below
