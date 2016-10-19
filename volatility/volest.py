@@ -17,14 +17,11 @@ from matplotlib.ticker import FuncFormatter
 from matplotlib.font_manager import FontProperties
 from matplotlib.backends.backend_pdf import PdfPages
 
-# references
-# http://stackoverflow.com/questions/4700614/how-to-put-the-legend-out-of-the-plot
-# http://www.blog.pythonlibrary.org/2010/09/04/python-101-how-to-open-a-file-or-program/
 
 class VolatilityEstimator(object):
 
     def __init__(self, ticker, start, end, type):
-        '''Constructor for volatility estimators
+        """Constructor for volatility estimators
         
         Parameters
         ----------
@@ -38,7 +35,7 @@ class VolatilityEstimator(object):
             Estimator type; valid arguments are:
                 "GarmanKlass", "HodgesTompkins", "Kurtosis", "Parkinson", "Raw",
                 "RogersSatchell", "Skew", "YangZhang"
-        '''
+        """
         if ticker is None or ticker == '':
             raise ValueError('Ticker symbol required')
         if start is None or start == '':
@@ -67,7 +64,7 @@ class VolatilityEstimator(object):
         matplotlib.rcParams['figure.subplot.top'] = 0.9
 
     def _get_estimator(self, window, ticker=None, clean=True):
-        '''Selector for volatility estimator
+        """Selector for volatility estimator
         
         Parameters
         ----------
@@ -80,7 +77,7 @@ class VolatilityEstimator(object):
         -------
         y : pandas.DataFrame
             Estimator series values
-        '''
+        """
         
         if not ticker:
             ticker = self._ticker
@@ -103,7 +100,7 @@ class VolatilityEstimator(object):
             return models.YangZhang.get_estimator(ticker=ticker, start=self._start, end=self._end, window=window, clean=clean)
    
     def cones(self, windows=[30, 60, 90, 120], quantiles=[0.25, 0.75]):
-        '''Plots volatility cones
+        """Plots volatility cones
         
         Parameters
         ----------
@@ -111,7 +108,7 @@ class VolatilityEstimator(object):
             List of rolling windows for which to calculate the estimator cones
         quantiles : [lower, upper]
             List of lower and upper quantiles for which to plot the cones
-        '''
+        """
         if len(windows) < 2:
             raise ValueError('Two or more window periods required')
         if len(quantiles) != 2:
@@ -147,9 +144,9 @@ class VolatilityEstimator(object):
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
         
-        '''
-        Figure args
-        '''
+		#
+        # figure args
+		#
         
         fig = plt.figure(figsize=(8, 6))
         
@@ -163,9 +160,10 @@ class VolatilityEstimator(object):
         cones = plt.axes(rect_cones)
         box = plt.axes(rect_box)
         
-        '''
-        Cones plot args
-        '''
+		#
+        # cones plot args
+		#
+		
         # set the plots
         cones.plot(windows, max, label="Max")
         cones.plot(windows, top_q, label=str(int(quantiles[1]*100)) + " Prctl")
@@ -192,9 +190,9 @@ class VolatilityEstimator(object):
         pos = cones.get_position() #
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
         
-        '''
-        Box plot args
-        '''
+		#
+        # box plot args
+		#
         
         # set the plots
         box.boxplot(data, notch=1, sym='+')
@@ -213,7 +211,7 @@ class VolatilityEstimator(object):
         return fig, plt
 
     def rolling_quantiles(self, window=30, quantiles=[0.25, 0.75]):
-        '''Plots rolling quantiles of volatility
+        """Plots rolling quantiles of volatility
         
         Parameters
         ----------
@@ -221,7 +219,7 @@ class VolatilityEstimator(object):
             Rolling window for which to calculate the estimator
         quantiles : [lower, upper]
             List of lower and upper quantiles for which to plot
-        '''
+        """
         if len(quantiles) != 2:
             raise ValueError('A two element list of quantiles is required, lower and upper')
         if quantiles[0] + quantiles[1] != 1.0:
@@ -242,9 +240,9 @@ class VolatilityEstimator(object):
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
 
-        '''
-        Figure args
-        '''
+        #
+		# figure args
+		#
         
         fig = plt.figure(figsize=(8, 6))
         
@@ -258,9 +256,9 @@ class VolatilityEstimator(object):
         cones = plt.axes(rect_cones)
         box = plt.axes(rect_box)
         
-        '''
-        Cones plot args
-        '''
+        #
+		# cones plot args
+		#
         
         # set the plots
         cones.plot(date, top_q, label=str(int(quantiles[1]*100)) + " Prctl")
@@ -281,9 +279,9 @@ class VolatilityEstimator(object):
         # set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
         
-        '''
-        Box plot args
-        '''
+        #
+		# box plot args
+		#
         
         # set the plots
         box.boxplot(realized, notch=1, sym='+')
@@ -302,13 +300,13 @@ class VolatilityEstimator(object):
         return fig, plt
 
     def rolling_extremes(self, window=30):
-        '''Plots rolling max and min of volatility estimator
+        """Plots rolling max and min of volatility estimator
         
         Parameters
         ----------
         window : int
             Rolling window for which to calculate the estimator
-        '''
+        """
         estimator = self._get_estimator(window)
         date = estimator.index
         max = pandas.rolling_max(estimator, window)
@@ -321,9 +319,9 @@ class VolatilityEstimator(object):
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
 
-        '''
-        Figure args
-        '''
+        #
+        # Figure args
+        #
         
         fig = plt.figure(figsize=(8, 6))
         
@@ -337,9 +335,9 @@ class VolatilityEstimator(object):
         cones = plt.axes(rect_cones)
         box = plt.axes(rect_box)
         
-        '''
-        Cones plot args
-        '''
+        #
+        # Cones plot args
+        #
         
         # set the plots
         cones.plot(date, max, label="Max")
@@ -359,9 +357,9 @@ class VolatilityEstimator(object):
         # set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
         
-        '''
-        Box plot args
-        '''
+        #
+        # Box plot args
+        #
         
         # set the plots
         box.boxplot(realized, notch=1, sym='+')
@@ -380,13 +378,13 @@ class VolatilityEstimator(object):
         return fig, plt
 
     def rolling_descriptives(self, window=30):
-        '''Plots rolling first and second moment of volatility estimator
+        """Plots rolling first and second moment of volatility estimator
         
         Parameters
         ----------
         window : int
             Rolling window for which to calculate the estimator
-        '''
+        """
         estimator = self._get_estimator(window)
         date = estimator.index
         mean = pandas.rolling_mean(estimator, window)
@@ -401,9 +399,9 @@ class VolatilityEstimator(object):
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
 
-        '''
-        Figure args
-        '''
+        #
+        # Figure args
+        #
         
         fig = plt.figure(figsize=(8, 6))
         
@@ -424,9 +422,9 @@ class VolatilityEstimator(object):
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
         
-        '''
-        Cones plot args
-        '''
+        #
+        # Cones plot args
+        #
         
         # set the plots
         cones.plot(date, mean, label="Mean")
@@ -448,9 +446,9 @@ class VolatilityEstimator(object):
         cones.set_position([pos.x0, pos.y0 + pos.height * 0.1, pos.width, pos.height * 0.9]) #
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
         
-        '''
-        Box plot args
-        '''
+        #
+        # Box plot args
+        #
         
         # set the plots
         box.boxplot(realized, notch=1, sym='+')
@@ -466,9 +464,9 @@ class VolatilityEstimator(object):
         # turn on the grid
         box.grid(True, axis='y', which='major', alpha=0.5)
         
-        '''
-        Z-Score plot args
-        '''
+        #
+        # Z-Score plot args
+        #
         
         # set the plots
         z.plot(date, z_score, 'm-', label="Z-Score")
@@ -485,7 +483,7 @@ class VolatilityEstimator(object):
         return fig, plt
 
     def histogram(self, window=90, bins=100, normed=True):
-        '''
+        """
         
         Parameters
         ----------
@@ -493,7 +491,7 @@ class VolatilityEstimator(object):
             Rolling window for which to calculate the estimator
         bins : int
             
-        '''
+        """
         estimator = self._get_estimator(window)
         mean = estimator.mean()
         std = estimator.std()
@@ -515,7 +513,7 @@ class VolatilityEstimator(object):
         return fig, plt
     
     def benchmark_compare(self, window=90, bench='^GSPC'):
-        '''
+        """
         
         Parameters
         ----------
@@ -523,7 +521,7 @@ class VolatilityEstimator(object):
             Rolling window for which to calculate the estimator
         bins : int
             
-        '''
+        """
         
         y = self._get_estimator(window)
         x = self._get_estimator(window, ticker=bench)
@@ -536,9 +534,9 @@ class VolatilityEstimator(object):
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
         
-        '''
-        Figure args
-        '''
+        #
+        # Figure args
+        #
         
         fig = plt.figure(figsize=(8, 6))
         
@@ -550,9 +548,9 @@ class VolatilityEstimator(object):
         cones = plt.axes(rect_cones)
         box = plt.axes(rect_box)
         
-        '''
-        Cones plot args
-        '''
+        #
+        # Cones plot args
+        #
         
         # set the plots
         cones.plot(date, y, label=self._ticker.upper())
@@ -571,9 +569,9 @@ class VolatilityEstimator(object):
         # shrink the plot up a bit and set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
 
-        '''
-        Cones plot args
-        '''
+        #
+        # Cones plot args
+        #
         
         # set the plot
         box.plot(date, ratio, label=self._ticker.upper() + '/' + bench.upper())
@@ -590,7 +588,7 @@ class VolatilityEstimator(object):
         return fig, plt
 
     def benchmark_correlation(self, window=90, bench='^GSPC'):
-        '''
+        """
         
         Parameters
         ----------
@@ -598,7 +596,7 @@ class VolatilityEstimator(object):
             Rolling window for which to calculate the estimator
         bins : int
             
-        '''
+        """
         
         y = self._get_estimator(window)
         x = self._get_estimator(window, ticker=bench)
@@ -611,16 +609,16 @@ class VolatilityEstimator(object):
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
         
-        '''
-        Figure args
-        '''
+        #
+        # Figure args
+        #
         
         fig = plt.figure(figsize=(8, 6))
         cones = plt.axes()
         
-        '''
-        Cones plot args
-        '''
+        #
+        # Cones plot args
+        #
         
         # set the plots
         cones.plot(date, corr)
@@ -641,7 +639,7 @@ class VolatilityEstimator(object):
         return fig, plt
 
     def benchmark_regression(self, window=90, bench='^GSPC'):
-        '''
+        """
         
         Parameters
         ----------
@@ -649,7 +647,7 @@ class VolatilityEstimator(object):
             Rolling window for which to calculate the estimator
         bins : int
             
-        '''
+        """
         y = self._get_estimator(window)
         x = self._get_estimator(window, ticker=bench)
         
