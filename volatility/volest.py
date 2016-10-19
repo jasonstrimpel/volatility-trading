@@ -185,7 +185,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end +  ')')
         
         # set the legend
         pos = cones.get_position() #
@@ -276,7 +276,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end +  ')')
         
         # set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
@@ -354,7 +354,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end +  ')')
         
         # set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
@@ -441,7 +441,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end +  ')')
         
         # shrink the plot up a bit and set the legend
         pos = cones.get_position() #
@@ -510,7 +510,7 @@ class VolatilityEstimator(object):
         plt.axvline(last, 0, 1, linestyle='-', linewidth=1.5, color='r')
 
         plt.grid(True, axis='y', which='major', alpha=0.5)
-        plt.title('Distribution of ' + self._estimator + ' estimator values (' + self._symbol + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        plt.title('Distribution of ' + self._estimator + ' estimator values (' + self._symbol + ', daily ' + self._start + ' to ' + self._end +  ')')
         
         return fig, plt
     
@@ -566,7 +566,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (' + self._symbol + ' v. ' + bench.upper() + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ' v. ' + bench.upper() + ', daily ' + self._start + ' to ' + self._end +  ')')
         
         # shrink the plot up a bit and set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
@@ -636,7 +636,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (Correlation of ' + self._symbol + ' v. ' + bench.upper() + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (Correlation of ' + self._symbol + ' v. ' + bench.upper() + ', daily ' + self._start + ' to ' + self._end +  ')')
         
         return fig, plt
 
