@@ -20,35 +20,35 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 class VolatilityEstimator(object):
 
-    def __init__(self, ticker, start, end, type):
+    def __init__(self, symbol, start, end, estimator):
         """Constructor for volatility estimators
         
         Parameters
         ----------
-        ticker : string
-            Stock ticker symbol valid on finance.yahoo.com
+        symbol : string
+            Stock symbol symbol valid on finance.yahoo.com
         start : datetime
             Start date for data collection
         end : datetime
             End date for data collection
-        type : string
-            Estimator type; valid arguments are:
+        estimator : string
+            Estimator estimator; valid arguments are:
                 "GarmanKlass", "HodgesTompkins", "Kurtosis", "Parkinson", "Raw",
                 "RogersSatchell", "Skew", "YangZhang"
         """
-        if ticker is None or ticker == '':
-            raise ValueError('Ticker symbol required')
+        if symbol is None or symbol == '':
+            raise ValueError('symbol symbol required')
         if start is None or start == '':
             raise ValueError('Start date required')
         if end is None or end == '':
             raise ValueError('End date required')
-        if type not in ["GarmanKlass", "HodgesTompkins", "Kurtosis", "Parkinson", "Raw", "RogersSatchell", "Skew", "YangZhang"]:
+        if estimator not in ["GarmanKlass", "HodgesTompkins", "Kurtosis", "Parkinson", "Raw", "RogersSatchell", "Skew", "YangZhang"]:
             raise ValueError('Acceptable volatility model is required')
         
-        self._ticker = ticker
+        self._symbol = symbol
         self._start = start
         self._end = end
-        self._type = type
+        self._estimator = estimator
         
         matplotlib.rc('image', origin='upper')
         
@@ -63,7 +63,7 @@ class VolatilityEstimator(object):
         matplotlib.rcParams['figure.subplot.right'] = 0.9
         matplotlib.rcParams['figure.subplot.top'] = 0.9
 
-    def _get_estimator(self, window, ticker=None, clean=True):
+    def _get_estimator(self, window, symbol=None, clean=True):
         """Selector for volatility estimator
         
         Parameters
@@ -79,25 +79,25 @@ class VolatilityEstimator(object):
             Estimator series values
         """
         
-        if not ticker:
-            ticker = self._ticker
+        if not symbol:
+            symbol = self._symbol
         
-        if self._type is "GarmanKlass":
-            return models.GarmanKlass.get_estimator(ticker=ticker, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._type is "HodgesTompkins":
-            return models.HodgesTompkins.get_estimator(ticker=ticker, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._type is "Kurtosis":
-            return models.Kurtosis.get_estimator(ticker=ticker, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._type is "Parkinson":
-            return models.Parkinson.get_estimator(ticker=ticker, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._type is "Raw":
-            return models.Raw.get_estimator(ticker=ticker, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._type is "RogersSatchell":
-            return models.RogersSatchell.get_estimator(ticker=ticker, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._type is "Skew":
-            return models.Skew.get_estimator(ticker=ticker, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._type is "YangZhang":
-            return models.YangZhang.get_estimator(ticker=ticker, start=self._start, end=self._end, window=window, clean=clean)
+        if self._estimator is "GarmanKlass":
+            return models.GarmanKlass.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
+        elif self._estimator is "HodgesTompkins":
+            return models.HodgesTompkins.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
+        elif self._estimator is "Kurtosis":
+            return models.Kurtosis.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
+        elif self._estimator is "Parkinson":
+            return models.Parkinson.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
+        elif self._estimator is "Raw":
+            return models.Raw.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
+        elif self._estimator is "RogersSatchell":
+            return models.RogersSatchell.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
+        elif self._estimator is "Skew":
+            return models.Skew.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
+        elif self._estimator is "YangZhang":
+            return models.YangZhang.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
    
     def cones(self, windows=[30, 60, 90, 120], quantiles=[0.25, 0.75]):
         """Plots volatility cones
@@ -139,7 +139,7 @@ class VolatilityEstimator(object):
 
             data.append(estimator)
         
-        if self._type is "Skew" or self._type is "Kurtosis":
+        if self._estimator is "Skew" or self._estimator is "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -184,7 +184,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._type + ' (' + self._ticker + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
         
         # set the legend
         pos = cones.get_position() #
@@ -229,13 +229,14 @@ class VolatilityEstimator(object):
         
         estimator = self._get_estimator(window)
         date = estimator.index
-        top_q = pandas.rolling_quantile(estimator, window, quantiles[1])
-        median = pandas.rolling_median(estimator, window)
-        bottom_q = pandas.rolling_quantile(estimator, window, quantiles[0])
+		
+        top_q = estimator.rolling(window=window, center=False).quantile(quantiles[1])
+        median = estimator.rolling(window=window, center=False).median()
+        bottom_q = estimator.rolling(window=window, center=False).quantile(quantiles[0])
         realized = estimator
         last = estimator[-1]
 
-        if self._type is "Skew" or self._type is "Kurtosis":
+        if self._estimator is "Skew" or self._estimator is "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -274,7 +275,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._type + ' (' + self._ticker + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
         
         # set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
@@ -309,12 +310,12 @@ class VolatilityEstimator(object):
         """
         estimator = self._get_estimator(window)
         date = estimator.index
-        max = pandas.rolling_max(estimator, window)
-        min = pandas.rolling_min(estimator, window)
+        max = estimator.rolling(window=window, center=False).max()
+        min = estimator.rolling(window=window, center=False).min()
         realized = estimator
         last = estimator[-1]
 
-        if self._type is "Skew" or self._type is "Kurtosis":
+        if self._estimator is "Skew" or self._estimator is "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -352,7 +353,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._type + ' (' + self._ticker + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
         
         # set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
@@ -394,7 +395,7 @@ class VolatilityEstimator(object):
         realized = estimator
         last = estimator[-1]
 
-        if self._type is "Skew" or self._type is "Kurtosis":
+        if self._estimator is "Skew" or self._estimator is "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -417,7 +418,7 @@ class VolatilityEstimator(object):
         box = plt.axes(rect_box)
         z = plt.axes(rect_z)
         
-        if self._type is "Skew" or self._type is "Kurtosis":
+        if self._estimator is "Skew" or self._estimator is "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -439,7 +440,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._type + ' (' + self._ticker + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
         
         # shrink the plot up a bit and set the legend
         pos = cones.get_position() #
@@ -508,7 +509,7 @@ class VolatilityEstimator(object):
         plt.axvline(last, 0, 1, linestyle='-', linewidth=1.5, color='r')
 
         plt.grid(True, axis='y', which='major', alpha=0.5)
-        plt.title('Distribution of ' + self._type + ' estimator values (' + self._ticker + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        plt.title('Distribution of ' + self._estimator + ' estimator values (' + self._symbol + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
         
         return fig, plt
     
@@ -524,12 +525,12 @@ class VolatilityEstimator(object):
         """
         
         y = self._get_estimator(window)
-        x = self._get_estimator(window, ticker=bench)
+        x = self._get_estimator(window, symbol=bench)
         date = y.index
         
         ratio = y / x
 
-        if self._type is "Skew" or self._type is "Kurtosis":
+        if self._estimator is "Skew" or self._estimator is "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -553,7 +554,7 @@ class VolatilityEstimator(object):
         #
         
         # set the plots
-        cones.plot(date, y, label=self._ticker.upper())
+        cones.plot(date, y, label=self._symbol.upper())
         cones.plot(date, x, label=bench.upper())
         
         # set and format the y-axis labels
@@ -564,7 +565,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._type + ' (' + self._ticker + ' v. ' + bench.upper() + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ' v. ' + bench.upper() + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
         
         # shrink the plot up a bit and set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
@@ -574,7 +575,7 @@ class VolatilityEstimator(object):
         #
         
         # set the plot
-        box.plot(date, ratio, label=self._ticker.upper() + '/' + bench.upper())
+        box.plot(date, ratio, label=self._symbol.upper() + '/' + bench.upper())
         
         # set the y-limits
         box.set_ylim((ratio.min() - 0.05, ratio.max() + 0.05))
@@ -599,12 +600,12 @@ class VolatilityEstimator(object):
         """
         
         y = self._get_estimator(window)
-        x = self._get_estimator(window, ticker=bench)
+        x = self._get_estimator(window, symbol=bench)
         date = y.index
 
         corr = pandas.rolling_corr(x, y, window)
 
-        if self._type is "Skew" or self._type is "Kurtosis":
+        if self._estimator is "Skew" or self._estimator is "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -634,7 +635,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._type + ' (Correlation of ' + self._ticker + ' v. ' + bench.upper() + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
+        cones.set_title(self._estimator + ' (Correlation of ' + self._symbol + ' v. ' + bench.upper() + ', daily ' + self._start.strftime("%Y-%m-%d") + ' to ' + self._end.strftime("%Y-%m-%d") +  ')')
         
         return fig, plt
 
@@ -649,7 +650,7 @@ class VolatilityEstimator(object):
             
         """
         y = self._get_estimator(window)
-        x = self._get_estimator(window, ticker=bench)
+        x = self._get_estimator(window, symbol=bench)
         
         model = str(pandas.ols(y=y, x=x))
 
@@ -665,9 +666,10 @@ class VolatilityEstimator(object):
         benchmark_compare_fig, benchmark_compare_plt = self.benchmark_compare(window=window, bench=bench)
         benchmark_corr_fig, benchmark_corr_plt = self.benchmark_correlation(window=window, bench=bench)
         benchmark_regression = self.benchmark_regression(window=window, bench=bench)
-
-        filename = self._ticker.upper() + '_termsheet_' + datetime.datetime.today().strftime("%Y%m%d") + '.pdf'
-        pp = PdfPages(filename)
+		
+        filename = self._symbol.upper() + '_termsheet_' + datetime.datetime.today().strftime("%Y%m%d") + '.pdf'
+        fn = os.path.abspath(os.path.join(u'term-sheets', filename))
+        pp = PdfPages(fn)
         
         pp.savefig(cones_fig)
         pp.savefig(rolling_quantiles_fig)
