@@ -2,7 +2,7 @@ import pandas
 from pandas_datareader.yahoo.daily import YahooDailyReader
 
 
-def get_data(symbols, start, end, adjust_price=True, interval='d'):
+def get_data(symbol, start, end, adjust_price=True, interval='d'):
     """
     Returns DataFrame/Panel of historical stock prices from symbols, over date
     range, start to end. 
@@ -20,7 +20,7 @@ def get_data(symbols, start, end, adjust_price=True, interval='d'):
     
         adjust_price : bool, default False
             If True, adjusts all prices in hist_data ('Open', 'High', 'Low',
-            'Close') based on 'Adj Close' price. Adds 'Adj_Ratio' column and drops
+            'Close') based on 'Close' price. Adds 'Adj_Ratio' column and drops
             'Adj Close'.
 
         interval : string, default 'd'
@@ -29,7 +29,7 @@ def get_data(symbols, start, end, adjust_price=True, interval='d'):
     
     """
     
-    data = YahooDailyReader(symbols=symbols, start=start, end=end, 
+    data = YahooDailyReader(symbols=symbol, start=start, end=end, 
                             adjust_price=adjust_price, 
                             interval=interval).read()
     del data['Adj_Ratio']
