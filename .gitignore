@@ -1,6 +1,7 @@
 __pycache__
 *.pyc
 *.egg-info
+*.csv
 .coverage
 build
 dist
