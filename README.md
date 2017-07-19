@@ -1,6 +1,7 @@
 # volest #
 
-## A complete set of volatility estimators based on Euan Sinclair's Volatility Trading (http://www.amazon.com/gp/product/0470181990/tag=quantfinancea-20. ##
+## A complete set of volatility estimators based on Euan Sinclair's Volatility Trading. ##
+### http://www.amazon.com/gp/product/0470181990/tag=quantfinancea-20 ###
 
 ### Volatility estimators include: ###
 
