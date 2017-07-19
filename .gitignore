@@ -2,6 +2,7 @@ __pycache__
 *.pyc
 *.egg-info
 *.csv
+*.pdf
 .coverage
 build
 dist
