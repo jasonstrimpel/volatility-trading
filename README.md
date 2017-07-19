@@ -69,12 +69,12 @@ estimator = 'GarmanKlass'
 
 
 #variables for the instances
-window=30
-windows=[30, 60, 90, 120]
-quantiles=[0.25, 0.75]
-bins=100
-normed=True
-bench='^GSPC'
+window = 30
+windows = [30, 60, 90, 120]
+quantiles = [0.25, 0.75]
+bins = 100
+normed = True
+bench = '^GSPC'
 
 
 # initialize class

@@ -1,7 +1,3 @@
-import pandas
-from pandas_datareader.yahoo.daily import YahooDailyReader
-
-
 def get_data(symbol, start, end, adjust_price=True, interval='d'):
     """
     Returns DataFrame/Panel of historical stock prices from symbols, over date
@@ -29,10 +25,11 @@ def get_data(symbol, start, end, adjust_price=True, interval='d'):
     
     """
     
-    data = YahooDailyReader(symbols=symbol, start=start, end=end, 
-                            adjust_price=adjust_price, 
-                            interval=interval).read()
-    del data['Adj_Ratio']
-    data['Return'] = (data['Close'] / data['Close'].shift(1)) - 1
-
-    return data
+    return False
+    # data = YahooDailyReader(symbols=symbol, start=start, end=end,
+    #                         adjust_price=adjust_price,
+    #                         interval=interval).read()
+    # del data['Adj_Ratio']
+    # data['Return'] = (data['Close'] / data['Close'].shift(1)) - 1
+    #
+    # return data

@@ -1,22 +1,16 @@
 import datetime
 import os
-from StringIO import StringIO
-
-import pandas
 
 import models
-import data
-import numpy as np
 import statsmodels.api as sm
 
 import matplotlib
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import matplotlib.mathtext as text
-from matplotlib.ticker import FuncFormatter
-from matplotlib.font_manager import FontProperties
 from matplotlib.backends.backend_pdf import PdfPages
+
+
+ESTIMATORS = ["GarmanKlass", "HodgesTompkins", "Kurtosis", "Parkinson", "Raw", "RogersSatchell", "Skew", "YangZhang"]
 
 
 class VolatilityEstimator(object):
@@ -43,7 +37,7 @@ class VolatilityEstimator(object):
             raise ValueError('Start date required')
         if end is None or end == '':
             raise ValueError('End date required')
-        if estimator not in ["GarmanKlass", "HodgesTompkins", "Kurtosis", "Parkinson", "Raw", "RogersSatchell", "Skew", "YangZhang"]:
+        if estimator not in ESTIMATORS:
             raise ValueError('Acceptable volatility model is required')
         
         self._symbol = symbol
@@ -82,23 +76,79 @@ class VolatilityEstimator(object):
         
         if not symbol:
             symbol = self._symbol
+
+        return getattr(models, self._estimator).get_estimator(
+            symbol=symbol,
+            start=self._start,
+            end=self._end,
+            window=window,
+            clean=clean
+        )
         
-        if self._estimator is "GarmanKlass":
-            return models.GarmanKlass.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._estimator is "HodgesTompkins":
-            return models.HodgesTompkins.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._estimator is "Kurtosis":
-            return models.Kurtosis.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._estimator is "Parkinson":
-            return models.Parkinson.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._estimator is "Raw":
-            return models.Raw.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._estimator is "RogersSatchell":
-            return models.RogersSatchell.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._estimator is "Skew":
-            return models.Skew.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
-        elif self._estimator is "YangZhang":
-            return models.YangZhang.get_estimator(symbol=symbol, start=self._start, end=self._end, window=window, clean=clean)
+        # if self._estimator is "GarmanKlass":
+        #     return models.GarmanKlass.get_estimator(
+        #         symbol=symbol,
+        #         start=self._start,
+        #         end=self._end,
+        #         window=window,
+        #         clean=clean
+        #     )
+        # elif self._estimator is "HodgesTompkins":
+        #     return models.HodgesTompkins.get_estimator(
+        #         symbol=symbol,
+        #         start=self._start,
+        #         end=self._end,
+        #         window=window,
+        #         clean=clean
+        #     )
+        # elif self._estimator is "Kurtosis":
+        #     return models.Kurtosis.get_estimator(
+        #         symbol=symbol,
+        #         start=self._start,
+        #         end=self._end,
+        #         window=window,
+        #         clean=clean
+        #     )
+        # elif self._estimator is "Parkinson":
+        #     return models.Parkinson.get_estimator(
+        #         symbol=symbol,
+        #         start=self._start,
+        #         end=self._end,
+        #         window=window,
+        #         clean=clean
+        #     )
+        # elif self._estimator is "Raw":
+        #     return models.Raw.get_estimator(
+        #         symbol=symbol,
+        #         start=self._start,
+        #         end=self._end,
+        #         window=window,
+        #         clean=clean
+        #     )
+        # elif self._estimator is "RogersSatchell":
+        #     return models.RogersSatchell.get_estimator(
+        #         symbol=symbol,
+        #         start=self._start,
+        #         end=self._end,
+        #         window=window,
+        #         clean=clean
+        #     )
+        # elif self._estimator is "Skew":
+        #     return models.Skew.get_estimator(
+        #         symbol=symbol,
+        #         start=self._start,
+        #         end=self._end,
+        #         window=window,
+        #         clean=clean
+        #     )
+        # elif self._estimator is "YangZhang":
+        #     return models.YangZhang.get_estimator(
+        #         symbol=symbol,
+        #         start=self._start,
+        #         end=self._end,
+        #         window=window,
+        #         clean=clean
+        #     )
    
     def cones(self, windows=[30, 60, 90, 120], quantiles=[0.25, 0.75]):
         """Plots volatility cones
@@ -111,13 +161,17 @@ class VolatilityEstimator(object):
             List of lower and upper quantiles for which to plot the cones
         """
         if len(windows) < 2:
-            raise ValueError('Two or more window periods required')
+            raise ValueError(
+                'Two or more window periods required')
         if len(quantiles) != 2:
-            raise ValueError('A two element list of quantiles is required, lower and upper')
+            raise ValueError(
+                'A two element list of quantiles is required, lower and upper')
         if quantiles[0] + quantiles[1] != 1.0:
-            raise ValueError('The sum of the quantiles must equal 1.0')
+            raise ValueError(
+                'The sum of the quantiles must equal 1.0')
         if quantiles[0] > quantiles[1]:
-            raise ValueError('The lower quantiles (first element) must be less than the upper quantile (second element)')
+            raise ValueError(
+                'The lower quantiles (first element) must be less than the upper quantile (second element)')
         
         max = []
         min = []
@@ -174,7 +228,7 @@ class VolatilityEstimator(object):
         cones.plot(windows, realized, 'r-.', label="Realized")
         
         # set the x ticks and limits
-        cones.set_xticks((windows))
+        cones.set_xticks(windows)
         cones.set_xlim((windows[0]-5, windows[-1]+5))
         
         # set and format the y-axis labels
@@ -185,10 +239,10 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end + ')')
         
         # set the legend
-        pos = cones.get_position() #
+        pos = cones.get_position()
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
         
         #
@@ -222,11 +276,14 @@ class VolatilityEstimator(object):
             List of lower and upper quantiles for which to plot
         """
         if len(quantiles) != 2:
-            raise ValueError('A two element list of quantiles is required, lower and upper')
+            raise ValueError(
+                'A two element list of quantiles is required, lower and upper')
         if quantiles[0] + quantiles[1] != 1.0:
-            raise ValueError('The sum of the quantiles must equal 1.0')
+            raise ValueError(
+                'The sum of the quantiles must equal 1.0')
         if quantiles[0] > quantiles[1]:
-            raise ValueError('The lower quantiles (first element) must be less than the upper quantile (second element)')
+            raise ValueError(
+                'The lower quantiles (first element) must be less than the upper quantile (second element)')
         
         estimator = self._get_estimator(window)
         date = estimator.index
@@ -276,7 +333,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end + ')')
         
         # set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
@@ -354,7 +411,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end + ')')
         
         # set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
@@ -441,7 +498,7 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol + ', daily ' + self._start + ' to ' + self._end + ')')
         
         # shrink the plot up a bit and set the legend
         pos = cones.get_position() #
@@ -510,7 +567,9 @@ class VolatilityEstimator(object):
         plt.axvline(last, 0, 1, linestyle='-', linewidth=1.5, color='r')
 
         plt.grid(True, axis='y', which='major', alpha=0.5)
-        plt.title('Distribution of ' + self._estimator + ' estimator values (' + self._symbol + ', daily ' + self._start + ' to ' + self._end +  ')')
+        plt.title('Distribution of ' + self._estimator +
+                  ' estimator values (' + self._symbol +
+                  ', daily ' + self._start + ' to ' + self._end + ')')
         
         return fig, plt
     
@@ -566,7 +625,9 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (' + self._symbol + ' v. ' + bench.upper() + ', daily ' + self._start + ' to ' + self._end +  ')')
+        cones.set_title(self._estimator + ' (' + self._symbol +
+                        ' v. ' + bench.upper() + ', daily ' +
+                        self._start + ' to ' + self._end + ')')
         
         # shrink the plot up a bit and set the legend
         cones.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3)
@@ -636,7 +697,9 @@ class VolatilityEstimator(object):
         cones.grid(True, axis='y', which='major', alpha=0.5)
         
         # set the title
-        cones.set_title(self._estimator + ' (Correlation of ' + self._symbol + ' v. ' + bench.upper() + ', daily ' + self._start + ' to ' + self._end +  ')')
+        cones.set_title(self._estimator + ' (Correlation of ' +
+                        self._symbol + ' v. ' + bench.upper() +
+                        ', daily ' + self._start + ' to ' + self._end + ')')
         
         return fig, plt
 
@@ -658,7 +721,15 @@ class VolatilityEstimator(object):
 
         return results.summary()
     
-    def term_sheet(self, window=30, windows=[30, 60, 90, 120], quantiles=[0.25, 0.75], bins=100, normed=True, bench='^GSPC', open=False):
+    def term_sheet(
+            self,
+            window=30,
+            windows=[30, 60, 90, 120],
+            quantiles=[0.25, 0.75],
+            bins=100,
+            normed=True,
+            bench='^GSPC',
+            open=False):
         
         cones_fig, cones_plt = self.cones(windows=windows, quantiles=quantiles)
         rolling_quantiles_fig, rolling_quantiles_plt = self.rolling_quantiles(window=window, quantiles=quantiles)
