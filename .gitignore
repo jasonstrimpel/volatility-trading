@@ -9,3 +9,5 @@ docs/build
 .ipynb_checkpoints/
 *.ipynb
 *.idea
+venv/
+debug.py
