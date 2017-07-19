@@ -1,7 +1,15 @@
 # volest #
 
-## A complete set of volatility estimators based on Euan Sinclair's Volatility Trading. ##
-### http://www.amazon.com/gp/product/0470181990/tag=quantfinancea-20 ###
+## A complete set of volatility estimators based on Euan Sinclair's Volatility Trading.
+http://www.amazon.com/gp/product/0470181990/tag=quantfinancea-20 ##
+
+The original version incorporated network data acquisition from Yahoo!Finance
+from `pandas_datareader`. Yahoo! changed their API and broke `pandas_datareader`.
+
+The changes allow you to specify your own data so you're not tied into equity
+data from Yahoo! finance. If you're still using equity data, just download
+a CSV from finance.yahoo.com and use the `data.yahoo_data_helper` method
+to form the data properly.
 
 ### Volatility estimators include: ###
 
@@ -29,7 +37,7 @@ For each of the estimators, plot:
 * Correlation against arbirary comparable
 * Regression against arbirary comparable
 
-Also creates a term sheet with all the metrics printed to a PDF.
+Create a term sheet with all the metrics printed to a PDF.
 
 ### Page 1 - Volatility cones ###
 ![Capture-1](docs/img/1.png)
@@ -60,43 +68,52 @@ Example usage:
 ```python
 
 import volest
+import data
 
-# variables to initialize class
+# data
 symbol = 'JPM'
-start = '2013-01-01'
-end = '2013-12-31'
+bench = '^GSPC'
+data_file_path = '../JPM.csv'
+bench_file_path = '../BENCH.csv'
 estimator = 'GarmanKlass'
 
 
-#variables for the instances
+# estimator windows
 window = 30
 windows = [30, 60, 90, 120]
 quantiles = [0.25, 0.75]
 bins = 100
 normed = True
-bench = '^GSPC'
 
+# use the yahoo helper to correctly format data from finance.yahoo.com
+jpm_price_data = data.yahoo_helper(symbol, data_file_path)
+spx_price_data = data.yahoo_helper(bench, bench_file_path)
 
 # initialize class
-vol = volest.VolatilityEstimator(symbol, start, end, estimator)
+vol = volest.VolatilityEstimator(
+    price_data=jpm_price_data,
+    estimator=estimator,
+    bench_data=spx_price_data
+)
 
+# call plt.show() on any of the below...
+_, plt = vol.cones(windows=windows, quantiles=quantiles)
+_, plt = vol.rolling_quantiles(window=window, quantiles=quantiles)
+_, plt = vol.rolling_extremes(window=window)
+_, plt = vol.rolling_descriptives(window=window)
+_, plt = vol.histogram(window=window, bins=bins, normed=normed)
 
-# call plt.show() on any of the below
-fig, plt = vol.cones(windows=windows, quantiles=quantiles)
-fig, plt = vol.rolling_quantiles(window=window, quantiles=quantiles)
-fig, plt = vol.rolling_extremes(window=window)
-fig, plt = vol.rolling_descriptives(window=window)
-fig, plt = vol.histogram(window=window, bins=bins, normed=normed)
-fig, plt = vol.benchmark_compare(window=window, bench=bench)
-fig, plt = vol.benchmark_correlation(window=window, bench=bench)
+_, plt = vol.benchmark_compare(window=window)
+_, plt = vol.benchmark_correlation(window=window)
 
-
-# prints regression statistics
-print vol.benchmark_regression(window=window, bench=bench)
-
-
-# creates a pdf term sheet with all metrics
-vol.term_sheet(window, windows, quantiles, bins, normed, bench)
+# ... or create a pdf term sheet with all metrics in term-sheets/
+vol.term_sheet(
+    window,
+    windows,
+    quantiles,
+    bins,
+    normed
+)
 
 ```
 
