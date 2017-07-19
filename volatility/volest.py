@@ -97,12 +97,13 @@ class VolatilityEstimator(object):
                 bench_data = array_to_dataframe(bench_data)
                 bench_data.symbol = '-NA-'
 
+            self._bench_data = bench_data
+            self._bench_symbol = bench_data.symbol
+
         self._price_data = price_data
         self._symbol = price_data.symbol
         self._start = start
         self._end = end
-        self._bench_data = bench_data
-        self._bench_symbol = bench_data.symbol
         self._estimator = estimator
         
         matplotlib.rc('image', origin='upper')
