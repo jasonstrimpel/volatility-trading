@@ -1,18 +1,15 @@
 import numpy as np
 
-import data
 
+def get_estimator(price_data, window=30, clean=True):
 
-def get_estimator(symbol, start, end, window=30, clean=True):
+    log_return = (price_data['Close'] / price_data['Close'].shift(1)).apply(np.log)
     
-    prices = data.get_data(symbol, start, end)
-    
-    log_return = (prices['Close'] / prices['Close'].shift(1)).apply(np.log)
-    
-    result = log_return.rolling(window=window,center=False).skew()
-    
-    result[:window-1] = np.nan
-    
+    result = log_return.rolling(
+        window=window,
+        center=False
+    ).skew()
+
     if clean:
         return result.dropna()
     else:
