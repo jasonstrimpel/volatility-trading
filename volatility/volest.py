@@ -670,7 +670,7 @@ class VolatilityEstimator(object):
         benchmark_regression = self.benchmark_regression(window=window, bench=bench)
         
         filename = self._symbol.upper() + '_termsheet_' + datetime.datetime.today().strftime("%Y%m%d") + '.pdf'
-        fn = os.path.abspath(os.path.join(u'term-sheets', filename))
+        fn = os.path.abspath(os.path.join(u'..', u'term-sheets', filename))
         pp = PdfPages(fn)
         
         pp.savefig(cones_fig)

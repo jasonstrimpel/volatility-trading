@@ -1,8 +1,8 @@
-#volest#
+# volest #
 
-A complete set of volatility estimators based on Euan Sinclair's Volatility Trading (http://www.amazon.com/gp/product/0470181990/ref=as_li_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=0470181990&linkCode=as2&tag=quantfinancea-20&linkId=OTGFUXGQ72RGDYYI).
+## A complete set of volatility estimators based on Euan Sinclair's Volatility Trading (http://www.amazon.com/gp/product/0470181990/tag=quantfinancea-20. ##
 
-Volatility estimators include:
+### Volatility estimators include: ###
 
 * Garman Klass
 * Hodges Tompkins
@@ -28,7 +28,31 @@ For each of the estimators, plot:
 * Correlation against arbirary comparable
 * Regression against arbirary comparable
 
-Also creates a term sheet with all the metrics printed to a PDF
+Also creates a term sheet with all the metrics printed to a PDF.
+
+### Page 1 - Volatility cones ###
+![Capture-1](docs/img/1.png)
+
+### Page 2 - Volatility rolling percentiles ###
+![Capture-2](docs/img/2.png)
+
+### Page 3 - Volatility rolling min and max ###
+![Capture-3](docs/img/3.png)
+
+### Page 4 - Volatility rolling mean, standard deviation and zscore ###
+![Capture-4](docs/img/4.png)
+
+### Page 5 - Volatility distribution ###
+![Capture-5](docs/img/5.png)
+
+### Page 6 - Volatility, benchmark volatility and ratio###
+![Capture-6](docs/img/6.png)
+
+### Page 7 - Volatility rolling correlation with benchmark ###
+![Capture-7](docs/img/7.png)
+
+### Page 3 - Volatility OLS results ###
+![Capture-8](docs/img/8.png)
 
 Example usage:
 
