@@ -9,7 +9,7 @@ import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
-import models
+from volatility import models
 
 ESTIMATORS = [
     'GarmanKlass',
@@ -743,4 +743,4 @@ class VolatilityEstimator(object):
         pp.savefig(fig)
         pp.close()
         
-        print filename + ' output complete'
+        print('%s output complete' % filename)
