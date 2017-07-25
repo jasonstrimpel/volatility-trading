@@ -107,7 +107,7 @@ class VolatilityEstimator(object):
         self._estimator = estimator
         
         matplotlib.rc('image', origin='upper')
-        
+
         matplotlib.rcParams['font.size'] = '11'
         
         matplotlib.rcParams['grid.color'] = 'lightgrey'
