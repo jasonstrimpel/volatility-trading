@@ -1,7 +1,7 @@
 # volest #
 
-## A complete set of volatility estimators based on Euan Sinclair's Volatility Trading.
-http://www.amazon.com/gp/product/0470181990/tag=quantfinancea-20 ##
+## A complete set of volatility estimators based on Euan Sinclair's Volatility Trading. ##
+http://www.amazon.com/gp/product/0470181990/tag=quantfinancea-20
 
 The original version incorporated network data acquisition from Yahoo!Finance
 from `pandas_datareader`. Yahoo! changed their API and broke `pandas_datareader`.
