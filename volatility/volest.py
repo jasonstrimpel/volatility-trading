@@ -108,7 +108,6 @@ class VolatilityEstimator(object):
         
         matplotlib.rc('image', origin='upper')
         
-        matplotlib.rcParams['font.family'] = 'Times New Roman'
         matplotlib.rcParams['font.size'] = '11'
         
         matplotlib.rcParams['grid.color'] = 'lightgrey'
