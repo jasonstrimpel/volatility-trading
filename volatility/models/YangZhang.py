@@ -29,8 +29,9 @@ def get_estimator(price_data, window=30, clean=True):
         window=window,
         center=False
     ).sum() * (1.0 / (window - 1.0))
-    
-    result = (open_vol + 0.164333 * close_vol + 0.835667 * window_rs).apply(np.sqrt) * math.sqrt(252)
+
+    k = 0.34 / (1 + (window + 1) / (window - 1))
+    result = (open_vol + k * close_vol + (1 - k) * window_rs).apply(np.sqrt) * math.sqrt(252)
 
     if clean:
         return result.dropna()
