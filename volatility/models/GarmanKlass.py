@@ -11,7 +11,7 @@ def get_estimator(price_data, window=30, clean=True):
     rs = 0.5 * log_hl**2 - (2*math.log(2)-1) * log_cc**2
     
     def f(v):
-        return math.sqrt(252 * v.mean())
+        return 252 * v.mean()**0.5
     
     result = rs.rolling(window=window, center=False).apply(func=f)
     
