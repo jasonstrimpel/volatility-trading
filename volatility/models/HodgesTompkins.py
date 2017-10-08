@@ -11,10 +11,11 @@ def get_estimator(price_data, window=30, clean=True):
         window=window,
         center=False
     ).std() * math.sqrt(252)
-    adj_factor = math.sqrt(
-        (1.0 / (1.0 - (window / (log_return.count() - (window - 1.0))) +
-                (window**2 - 1.0)/(3.0 * (log_return.count() - (window - 1.0))**2)))
-    )
+
+    h = window
+    n = (log_return.count() - h) + 1
+
+    adj_factor = 1.0 / (1.0 - (h / n) + ((h**2 - 1) / (3 * n**2)))
 
     result = vol * adj_factor
 
