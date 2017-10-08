@@ -3,7 +3,7 @@ import math
 import numpy as np
 
 
-def get_estimator(price_data, window=30, clean=True):
+def get_estimator(price_data, window=30, trading_periods=252, clean=True):
 
     log_ho = (price_data['High'] / price_data['Open']).apply(np.log)
     log_lo = (price_data['Low'] / price_data['Open']).apply(np.log)
@@ -31,7 +31,7 @@ def get_estimator(price_data, window=30, clean=True):
     ).sum() * (1.0 / (window - 1.0))
 
     k = 0.34 / (1 + (window + 1) / (window - 1))
-    result = (open_vol + k * close_vol + (1 - k) * window_rs).apply(np.sqrt) * math.sqrt(252)
+    result = (open_vol + k * close_vol + (1 - k) * window_rs).apply(np.sqrt) * math.sqrt(trading_periods)
 
     if clean:
         return result.dropna()
