@@ -3,9 +3,9 @@ import os
 
 import pandas
 import numpy
+from scipy.stats import norm
 import statsmodels.api as sm
 import matplotlib
-import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
@@ -529,7 +529,7 @@ class VolatilityEstimator(object):
         n, bins, patches = plt.hist(estimator, bins, normed=normed, facecolor='blue', alpha=0.25)
         
         if normed:
-            y = mlab.normpdf(bins, mean, std)
+            y = norm.pdf(bins, mean, std)
             plt.plot(bins, y, 'g--', linewidth=1)
 
         plt.axvline(last, 0, 1, linestyle='-', linewidth=1.5, color='r')
