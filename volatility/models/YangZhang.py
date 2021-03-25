@@ -30,7 +30,7 @@ def get_estimator(price_data, window=30, trading_periods=252, clean=True):
         center=False
     ).sum() * (1.0 / (window - 1.0))
 
-    k = 0.34 / (1 + (window + 1) / (window - 1))
+    k = 0.34 / (1.34 + (window + 1) / (window - 1))
     result = (open_vol + k * close_vol + (1 - k) * window_rs).apply(np.sqrt) * math.sqrt(trading_periods)
 
     if clean:
