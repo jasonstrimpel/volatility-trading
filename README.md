@@ -67,16 +67,13 @@ Example usage:
 
 ```python
 
-import volest
-import data
+from volatility import volest
+import yfinance as yf
 
 # data
 symbol = 'JPM'
-bench = '^GSPC'
-data_file_path = '../JPM.csv'
-bench_file_path = '../BENCH.csv'
+bench = 'SPY'
 estimator = 'GarmanKlass'
-
 
 # estimator windows
 window = 30
@@ -86,8 +83,10 @@ bins = 100
 normed = True
 
 # use the yahoo helper to correctly format data from finance.yahoo.com
-jpm_price_data = data.yahoo_helper(symbol, data_file_path)
-spx_price_data = data.yahoo_helper(bench, bench_file_path)
+jpm_price_data = yf.Ticker(symbol).history(period="5y")
+jpm_price_data.symbol = symbol
+spx_price_data = yf.Ticker(bench).history(period="5y")
+spx_price_data.symbol = bench
 
 # initialize class
 vol = volest.VolatilityEstimator(
