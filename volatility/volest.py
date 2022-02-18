@@ -190,7 +190,7 @@ class VolatilityEstimator(object):
 
             data.append(estimator)
         
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -282,7 +282,7 @@ class VolatilityEstimator(object):
         realized = estimator
         last = estimator[-1]
 
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -356,7 +356,7 @@ class VolatilityEstimator(object):
         realized = estimator
         last = estimator[-1]
 
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -431,7 +431,7 @@ class VolatilityEstimator(object):
         realized = estimator
         last = estimator[-1]
 
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -450,7 +450,7 @@ class VolatilityEstimator(object):
         box = plt.axes(rect_box)
         z = plt.axes(rect_z)
         
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -567,7 +567,7 @@ class VolatilityEstimator(object):
         
         ratio = y / x
 
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -642,7 +642,7 @@ class VolatilityEstimator(object):
 
         corr = x.rolling(window=window).corr(other=y)
 
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
