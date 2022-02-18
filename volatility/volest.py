@@ -526,7 +526,7 @@ class VolatilityEstimator(object):
 
         fig = plt.figure(figsize=(8, 6))
         
-        n, bins, patches = plt.hist(estimator, bins, normed=normed, facecolor='blue', alpha=0.25)
+        n, bins, patches = plt.hist(estimator, bins, color='blue', density=True, stacked=True, cumulative=True)
         
         if normed:
             y = norm.pdf(bins, mean, std)
