@@ -190,7 +190,7 @@ class VolatilityEstimator(object):
 
             data.append(estimator)
         
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -245,7 +245,7 @@ class VolatilityEstimator(object):
         # turn on the grid
         box.grid(True, axis='y', which='major', alpha=0.5)
         
-        return fig, plt
+        return fig, plt, data
 
     def rolling_quantiles(self, window=30, quantiles=[0.25, 0.75]):
         """Plots rolling quantiles of volatility
@@ -282,7 +282,7 @@ class VolatilityEstimator(object):
         realized = estimator
         last = estimator[-1]
 
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -356,7 +356,7 @@ class VolatilityEstimator(object):
         realized = estimator
         last = estimator[-1]
 
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -431,7 +431,7 @@ class VolatilityEstimator(object):
         realized = estimator
         last = estimator[-1]
 
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -450,7 +450,7 @@ class VolatilityEstimator(object):
         box = plt.axes(rect_box)
         z = plt.axes(rect_z)
         
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -526,7 +526,7 @@ class VolatilityEstimator(object):
 
         fig = plt.figure(figsize=(8, 6))
         
-        n, bins, patches = plt.hist(estimator, bins, normed=normed, facecolor='blue', alpha=0.25)
+        n, bins, patches = plt.hist(estimator, bins, facecolor='blue', alpha=0.25)
         
         if normed:
             y = norm.pdf(bins, mean, std)
@@ -567,7 +567,7 @@ class VolatilityEstimator(object):
         
         ratio = y / x
 
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -642,7 +642,7 @@ class VolatilityEstimator(object):
 
         corr = x.rolling(window=window).corr(other=y)
 
-        if self._estimator is "Skew" or self._estimator is "Kurtosis":
+        if self._estimator == "Skew" or self._estimator == "Kurtosis":
             f = lambda x: "%i" % round(x, 0)
         else:
             f = lambda x: "%i%%" % round(x*100, 0)
@@ -707,7 +707,7 @@ class VolatilityEstimator(object):
             normed=True,
             open=False):
         
-        cones_fig, cones_plt = self.cones(windows=windows, quantiles=quantiles)
+        cones_fig, cones_plt, _ = self.cones(windows=windows, quantiles=quantiles)
         rolling_quantiles_fig, rolling_quantiles_plt = self.rolling_quantiles(window=window, quantiles=quantiles)
         rolling_extremes_fig, rolling_extremes_plt = self.rolling_extremes(window=window)
         rolling_descriptives_fig, rolling_descriptives_plt = self.rolling_descriptives(window=window)
@@ -717,7 +717,7 @@ class VolatilityEstimator(object):
         benchmark_regression = self.benchmark_regression(window=window)
         
         filename = self._symbol.upper() + '_termsheet_' + datetime.datetime.today().strftime("%Y%m%d") + '.pdf'
-        fn = os.path.abspath(os.path.join(u'..', u'term-sheets', filename))
+        fn = os.path.abspath(os.path.join(u'term-sheets', filename))
         pp = PdfPages(fn)
         
         pp.savefig(cones_fig)

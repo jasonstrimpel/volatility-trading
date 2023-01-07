@@ -12,3 +12,6 @@ docs/build
 *.idea
 venv/
 debug.py
+
+.venv/
+.vscode/
