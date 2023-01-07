@@ -30,13 +30,16 @@ def test_overlapping_sample_msft():
     estimator = 'Raw'
 
     # estimator windows
-    # window = 30
-
     # don't change these... they are specific to this test
     windows = [20, 40, 60, 120]
     quantiles = [0.25, 0.75]
-    # bins = 100
-    # normed = True
+
+    # other vars
+    window = 30
+    bins = 100
+    normed = True
+
+    use_overlapping_adjustment_factor = False
 
     # MSFT is used as the example in Volatility Trading, 2nd Edition
     msft_price_data = get_yf_data('MSFT')
@@ -50,7 +53,8 @@ def test_overlapping_sample_msft():
     )
 
     # call plt.show() on any of the below...
-    _, plt, cone_datas = vol.cones(windows=windows, quantiles=quantiles)
+    _, plt, cone_datas = vol.cones(windows=windows, quantiles=quantiles, use_overlapping_adjustment_factor=use_overlapping_adjustment_factor)
+
     # _, plt = vol.rolling_quantiles(window=window, quantiles=quantiles)
     # _, plt = vol.rolling_extremes(window=window)
     # _, plt = vol.rolling_descriptives(window=window)
@@ -62,14 +66,15 @@ def test_overlapping_sample_msft():
     # if not os.path.exists('term-sheets/'):
     #     os.makedirs('term-sheets/')
 
-    # ... or create a pdf term sheet with all metrics in term-sheets/
-    # vol.term_sheet(
-    #     window,
-    #     windows,
-    #     quantiles,
-    #     bins,
-    #     normed
-    # )
+    # # ... or create a pdf term sheet with all metrics in term-sheets/
+    vol.term_sheet(
+        window,
+        windows,
+        quantiles,
+        bins,
+        normed,
+        use_overlapping_adjustment_factor
+    )
 
     window_datas = {}
 
@@ -149,4 +154,4 @@ def test_overlapping_sample_msft():
 
         error_total += error_window
 
-    print(f"total: {error_window}")
+    print(f"total: {error_total}")

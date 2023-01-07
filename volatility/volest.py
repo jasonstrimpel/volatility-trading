@@ -118,7 +118,7 @@ class VolatilityEstimator(object):
         matplotlib.rcParams['figure.subplot.right'] = 0.9
         matplotlib.rcParams['figure.subplot.top'] = 0.9
 
-    def _get_estimator(self, window, price_data, clean=True):
+    def _get_estimator(self, window, price_data, clean=True, use_overlapping_adjustment_factor=True):
         """Selector for volatility estimator
         
         Parameters
@@ -137,10 +137,11 @@ class VolatilityEstimator(object):
         return getattr(models, self._estimator).get_estimator(
             price_data=price_data,
             window=window,
-            clean=clean
+            clean=clean,
+            use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
    
-    def cones(self, windows=[30, 60, 90, 120], quantiles=[0.25, 0.75]):
+    def cones(self, windows=[30, 60, 90, 120], quantiles=[0.25, 0.75], use_overlapping_adjustment_factor=True):
         """Plots volatility cones
         
         Parameters
@@ -178,7 +179,9 @@ class VolatilityEstimator(object):
             
             estimator = self._get_estimator(
                 window=window,
-                price_data=price_data
+                price_data=price_data,
+                clean=True,
+                use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
             )
 
             max_.append(estimator.max())
@@ -247,7 +250,7 @@ class VolatilityEstimator(object):
         
         return fig, plt, data
 
-    def rolling_quantiles(self, window=30, quantiles=[0.25, 0.75]):
+    def rolling_quantiles(self, window=30, quantiles=[0.25, 0.75], use_overlapping_adjustment_factor=True):
         """Plots rolling quantiles of volatility
         
         Parameters
@@ -272,7 +275,9 @@ class VolatilityEstimator(object):
         
         estimator = self._get_estimator(
             window=window,
-            price_data=price_data
+            price_data=price_data,
+            clean=True,
+            use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
         date = estimator.index
         
@@ -335,7 +340,7 @@ class VolatilityEstimator(object):
         
         return fig, plt
 
-    def rolling_extremes(self, window=30):
+    def rolling_extremes(self, window=30, use_overlapping_adjustment_factor=True):
         """Plots rolling max and min of volatility estimator
         
         Parameters
@@ -348,7 +353,9 @@ class VolatilityEstimator(object):
 
         estimator = self._get_estimator(
             window=window,
-            price_data=price_data
+            price_data=price_data,
+            clean=True,
+            use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
         date = estimator.index
         max_ = estimator.rolling(window=window, center=False).max()
@@ -408,7 +415,7 @@ class VolatilityEstimator(object):
         
         return fig, plt
 
-    def rolling_descriptives(self, window=30):
+    def rolling_descriptives(self, window=30, use_overlapping_adjustment_factor=True):
         """Plots rolling first and second moment of volatility estimator
         
         Parameters
@@ -421,7 +428,9 @@ class VolatilityEstimator(object):
 
         estimator = self._get_estimator(
             window=window,
-            price_data=price_data
+            price_data=price_data,
+            clean=True,
+            use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
         date = estimator.index
         mean = estimator.rolling(window=window, center=False).mean()
@@ -503,7 +512,7 @@ class VolatilityEstimator(object):
         
         return fig, plt
 
-    def histogram(self, window=90, bins=100, normed=True):
+    def histogram(self, window=90, bins=100, normed=True, use_overlapping_adjustment_factor=True):
         """
         
         Parameters
@@ -518,7 +527,9 @@ class VolatilityEstimator(object):
 
         estimator = self._get_estimator(
             window=window,
-            price_data=price_data
+            price_data=price_data,
+            clean=True,
+            use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
         mean = estimator.mean()
         std = estimator.std()
@@ -541,7 +552,7 @@ class VolatilityEstimator(object):
         
         return fig, plt
     
-    def benchmark_compare(self, window=90):
+    def benchmark_compare(self, window=90, use_overlapping_adjustment_factor=True):
         """
         
         Parameters
@@ -557,11 +568,15 @@ class VolatilityEstimator(object):
 
         y = self._get_estimator(
             window=window,
-            price_data=price_data
+            price_data=price_data,
+            clean=True,
+            use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
         x = self._get_estimator(
             window=window,
-            price_data=bench_data
+            price_data=bench_data,
+            clean=True,
+            use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
         date = y.index
         
@@ -616,7 +631,7 @@ class VolatilityEstimator(object):
 
         return fig, plt
 
-    def benchmark_correlation(self, window=90):
+    def benchmark_correlation(self, window=90, use_overlapping_adjustment_factor=True):
         """
         
         Parameters
@@ -632,11 +647,15 @@ class VolatilityEstimator(object):
 
         y = self._get_estimator(
             window=window,
-            price_data=price_data
+            price_data=price_data,
+            clean=True,
+            use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
         x = self._get_estimator(
             window=window,
-            price_data=bench_data
+            price_data=bench_data,
+            clean=True,
+            use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
         date = y.index
 
@@ -671,7 +690,7 @@ class VolatilityEstimator(object):
         
         return fig, plt
 
-    def benchmark_regression(self, window=90):
+    def benchmark_regression(self, window=90, use_overlapping_adjustment_factor=True):
         """
         
         Parameters
@@ -686,11 +705,15 @@ class VolatilityEstimator(object):
 
         y = self._get_estimator(
             window=window,
-            price_data=price_data
+            price_data=price_data,
+            clean=True,
+            use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
         X = self._get_estimator(
             window=window,
-            price_data=bench_data
+            price_data=bench_data,
+            clean=True,
+            use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
         
         model = sm.OLS(y, X)
@@ -705,15 +728,15 @@ class VolatilityEstimator(object):
             quantiles=[0.25, 0.75],
             bins=100,
             normed=True,
-            open=False):
+            use_overlapping_adjustment_factor=True):
         
-        cones_fig, cones_plt, _ = self.cones(windows=windows, quantiles=quantiles)
-        rolling_quantiles_fig, rolling_quantiles_plt = self.rolling_quantiles(window=window, quantiles=quantiles)
-        rolling_extremes_fig, rolling_extremes_plt = self.rolling_extremes(window=window)
-        rolling_descriptives_fig, rolling_descriptives_plt = self.rolling_descriptives(window=window)
-        histogram_fig, histogram_plt = self.histogram(window=window, bins=bins, normed=normed)
-        benchmark_compare_fig, benchmark_compare_plt = self.benchmark_compare(window=window)
-        benchmark_corr_fig, benchmark_corr_plt = self.benchmark_correlation(window=window)
+        cones_fig, cones_plt, _ = self.cones(windows=windows, quantiles=quantiles, use_overlapping_adjustment_factor=use_overlapping_adjustment_factor)
+        rolling_quantiles_fig, rolling_quantiles_plt = self.rolling_quantiles(window=window, quantiles=quantiles, use_overlapping_adjustment_factor=use_overlapping_adjustment_factor)
+        rolling_extremes_fig, rolling_extremes_plt = self.rolling_extremes(window=window, use_overlapping_adjustment_factor=use_overlapping_adjustment_factor)
+        rolling_descriptives_fig, rolling_descriptives_plt = self.rolling_descriptives(window=window, use_overlapping_adjustment_factor=use_overlapping_adjustment_factor)
+        histogram_fig, histogram_plt = self.histogram(window=window, bins=bins, normed=normed, use_overlapping_adjustment_factor=use_overlapping_adjustment_factor)
+        benchmark_compare_fig, benchmark_compare_plt = self.benchmark_compare(window=window, use_overlapping_adjustment_factor=use_overlapping_adjustment_factor)
+        benchmark_corr_fig, benchmark_corr_plt = self.benchmark_correlation(window=window, use_overlapping_adjustment_factor=use_overlapping_adjustment_factor)
         benchmark_regression = self.benchmark_regression(window=window)
         
         filename = self._symbol.upper() + '_termsheet_' + datetime.datetime.today().strftime("%Y%m%d") + '.pdf'
