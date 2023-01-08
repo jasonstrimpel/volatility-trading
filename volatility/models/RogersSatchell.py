@@ -15,7 +15,7 @@ def get_estimator(price_data, window=30, trading_periods=252, clean=True, use_ov
     rs = log_ho * (log_ho - log_co) + log_lo * (log_lo - log_co)
 
     def f(v):
-        return ((trading_periods * v.mean())**0.5) * math.sqrt(m)
+        return ((trading_periods * abs(v.mean()))**0.5) * math.sqrt(m)
     
     result = rs.rolling(
         window=window,

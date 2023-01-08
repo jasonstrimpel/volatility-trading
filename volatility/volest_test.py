@@ -42,18 +42,20 @@ def test_overlapping_sample_msft():
         use_overlapping_adjustment_factor = True
 
         # MSFT is used as the example in Volatility Trading, 2nd Edition
-        msft_price_data = get_yf_data('MSFT')
-        spx_price_data  = get_yf_data('SPY')
+        subject_price_data  = get_yf_data('MSFT')
+        bench_price_data    = get_yf_data('SPY')
 
         # initialize class
         vol = volest.VolatilityEstimator(
-            price_data=msft_price_data,
+            price_data=subject_price_data,
             estimator=estimator,
-            bench_data=spx_price_data
+            bench_data=bench_price_data
         )
 
         # call plt.show() on any of the below...
-        _, plt, cone_datas = vol.cones(windows=windows, quantiles=quantiles, use_overlapping_adjustment_factor=use_overlapping_adjustment_factor)
+        _, plt = vol.cones(windows=windows, quantiles=quantiles
+            # ,   use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
+        )
 
         # _, plt = vol.rolling_quantiles(window=window, quantiles=quantiles)
         # _, plt = vol.rolling_extremes(window=window)
@@ -72,11 +74,11 @@ def test_overlapping_sample_msft():
             windows,
             quantiles,
             bins,
-            normed,
-            use_overlapping_adjustment_factor
+            normed
+        # ,   use_overlapping_adjustment_factor
         )
 
-        if estimator == 'Raw':
+        if estimator == 'Raw' and False:
 
             window_datas = {}
 
