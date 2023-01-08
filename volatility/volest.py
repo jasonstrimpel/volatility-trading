@@ -13,7 +13,6 @@ from volatility import models
 
 ESTIMATORS = [
     'GarmanKlass',
-    'HodgesTompkins',
     'Kurtosis',
     'Parkinson',
     'Raw',
@@ -51,7 +50,7 @@ class VolatilityEstimator(object):
             with no date data
         estimator : string
             Estimator estimator; valid arguments are:
-                "GarmanKlass", "HodgesTompkins", "Kurtosis", "Parkinson", "Raw",
+                "GarmanKlass", "Kurtosis", "Parkinson", "Raw",
                 "RogersSatchell", "Skew", "YangZhang"
         """
 
@@ -739,7 +738,7 @@ class VolatilityEstimator(object):
         benchmark_corr_fig, benchmark_corr_plt = self.benchmark_correlation(window=window, use_overlapping_adjustment_factor=use_overlapping_adjustment_factor)
         benchmark_regression = self.benchmark_regression(window=window)
         
-        filename = self._symbol.upper() + '_termsheet_' + datetime.datetime.today().strftime("%Y%m%d") + '.pdf'
+        filename = self._symbol.upper() + f'_{self._estimator}_termsheet_' + datetime.datetime.today().strftime("%Y%m%d") + '.pdf'
         fn = os.path.abspath(os.path.join(u'term-sheets', filename))
         pp = PdfPages(fn)
         

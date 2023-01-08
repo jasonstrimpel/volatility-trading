@@ -14,7 +14,6 @@ to form the data properly.
 ### Volatility estimators include: ###
 
 * Garman Klass
-* Hodges Tompkins
 * Parkinson
 * Rogers Satchell
 * Yang Zhang

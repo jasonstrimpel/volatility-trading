@@ -2,8 +2,7 @@ import math
 
 import numpy as np
 
-from volatility.models.api import get_variance_overlapping_adjustment_factor
-
+from volatility.models.overlapping_sample import get_variance_overlapping_adjustment_factor
 
 def get_estimator(price_data, window=30, trading_periods=252, clean=True, use_overlapping_adjustment_factor=True):
 
