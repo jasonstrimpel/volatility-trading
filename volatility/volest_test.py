@@ -53,7 +53,7 @@ def test_overlapping_sample_msft():
         )
 
         # call plt.show() on any of the below...
-        _, plt = vol.cones(windows=windows, quantiles=quantiles
+        _, plt, cone_datas = vol.cones(windows=windows, quantiles=quantiles
             # ,   use_overlapping_adjustment_factor=use_overlapping_adjustment_factor
         )
 
