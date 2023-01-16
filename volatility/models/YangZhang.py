@@ -12,10 +12,16 @@ def get_estimator(price_data, window=30, trading_periods=252, clean=True, use_ov
     d = {}
 
     # open
-    d['log_oo'] = np.log(price_data['Open']     / price_data['Open'].shift(1))
+    # NOTE: (open / yesterday's open) is how the function appears in Euan Sinclair's Volatility Trading, 2nd Edition, Equation 2.17b
+    # d['log_oo'] = np.log(price_data['Open']     / price_data['Open'].shift(1))
+    # This version of the equation makes more sense: https://portfolioslab.com/tools/yang-zhang
+    d['log_oo'] = np.log(df['open']     / df['close'].shift(1))
 
     # close
-    d['log_cc'] = np.log(price_data['Close']    / price_data['Close'].shift(1))
+    # NOTE: (close / yesterday's close) is how the function appears in Euan Sinclair's Volatility Trading, 2nd Edition, Equation 2.17c
+    # d['log_cc'] = np.log(price_data['Close']    / price_data['Close'].shift(1))
+    # This version of the equation makes more sense: https://portfolioslab.com/tools/yang-zhang
+    d['log_cc'] = np.log(df['close']    / df['open'])
 
     # Rogers and Satchell
     log_hc = np.log(price_data['High']      / price_data['Close'])

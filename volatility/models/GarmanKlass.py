@@ -16,9 +16,7 @@ def get_estimator(price_data, window=30, trading_periods=252, clean=True, use_ov
     # NOTE: (close / yesterday's close) is how the function appears in Euan Sinclair's Volatility Trading, 2nd Edition, Equation 2.15
     # and also in the original Garman-Klass paper (equation 19a) https://www.cmegroup.com/trading/fx/files/a_estimation_of_security_price.pdf
     # ,   'log_cX': (np.log(price_data['Close']    / price_data['Close'].shift(1))) ** 2
-
-    # The equation using close / open has been observed in several places on the internet... and seem to produce "better looking" results 
-    # using the MSFT example data
+    # This version of the equation seem to produce "better looking" results  using the MSFT example data: https://portfolioslab.com/tools/garman-klass
     ,   'log_cX': (np.log(price_data['Close']    / price_data['Open'])) ** 2
     })
 
