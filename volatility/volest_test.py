@@ -27,7 +27,7 @@ def test_overlapping_sample_msft():
         # use the yahoo helper to correctly format data from finance.yahoo.com
         return data_helpers.yahoo_helper(symbol, csv_path)
 
-    for estimator in volest.ESTIMATORS:
+    for estimator in ['Raw', 'Parkinson', 'GarmanKlass', 'RogersSatchell', 'YangZhang']:
 
         # estimator windows
         # don't change these... they are specific to this test

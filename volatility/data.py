@@ -17,6 +17,11 @@ def yahoo_helper(symbol, data_path, *args):
     """
 
     try:
+
+        # NOTE: one might be tempted to use Adj Close here... and that would be wrong.
+        # Adj Close could be a value outside of the low to high range, causing these 
+        # volitility estimators to make absolute nonsense. 
+
         data = pandas.read_csv(
             data_path,
             parse_dates=['Date'],
@@ -26,12 +31,14 @@ def yahoo_helper(symbol, data_path, *args):
                 'Open',
                 'High',
                 'Low',
-                'Adj Close',
+                'Close',
+                # 'Adj Close',
             ],
             *args
-        ).rename(columns={
-            'Adj Close': 'Close'
-        })
+        )
+        # .rename(columns={
+        #     'Adj Close': 'Close'
+        # })
 
     except Exception as e:
         raise e
