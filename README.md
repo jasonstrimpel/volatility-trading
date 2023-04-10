@@ -1,6 +1,6 @@
 # volest #
 
-## Learn how to apply this code to your open options trading ##
+## Learn how to apply this code to your own options trading ##
 
 [Getting Started With Python for Quant Finance](https://gettingstartedwithpythonforquantfinance.com) is the cohort-based course and community that will take you from complete beginner to up and running with Python for quant finance in 30 days.
 
